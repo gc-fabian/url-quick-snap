@@ -9,6 +9,7 @@ export interface UrlData {
   clicks: number;
   createdAt: string;
   expiresAt: string;
+  customName?: string;
 }
 
 // In a real application, this would be stored in a database
@@ -22,7 +23,7 @@ const getBaseUrl = () => {
 
 // Generate a short ID for the URL
 const generateShortId = () => {
-  return nanoid(8); // 8 character ID
+  return nanoid(5); // Reduced to 5 characters for shorter URLs
 };
 
 // Get all URLs from localStorage
@@ -50,7 +51,7 @@ const saveUrls = (urls: UrlData[]) => {
 };
 
 // Create a new short URL
-export const createShortUrl = async (originalUrl: string): Promise<UrlData> => {
+export const createShortUrl = async (originalUrl: string, customName?: string): Promise<UrlData> => {
   try {
     // Validate URL format
     try {
@@ -71,8 +72,30 @@ export const createShortUrl = async (originalUrl: string): Promise<UrlData> => {
       }
     }
     
-    const shortId = generateShortId();
-    const shortUrl = `${getBaseUrl()}/r/${shortId}`;
+    let shortId;
+    
+    // If custom name is provided, use it as the URL ID
+    if (customName && customName.trim() !== '') {
+      // Sanitize the custom name - replace spaces with dashes and remove special characters
+      shortId = customName.trim()
+        .toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^a-z0-9-]/g, '');
+      
+      // Check if this custom name is already in use
+      const existingUrls = getAllUrls();
+      const nameExists = existingUrls.some(url => url.id === shortId);
+      
+      if (nameExists) {
+        throw new Error('This custom name is already in use. Please choose a different one.');
+      }
+    } else {
+      // Generate a random short ID
+      shortId = generateShortId();
+    }
+    
+    // Create shorter URL directly to the ID instead of including '/r/'
+    const shortUrl = `${getBaseUrl()}/${shortId}`;
     
     // Calculate expiration (3 days from now)
     const now = new Date();
@@ -85,7 +108,8 @@ export const createShortUrl = async (originalUrl: string): Promise<UrlData> => {
       shortUrl,
       clicks: 0,
       createdAt: now.toISOString(),
-      expiresAt: expirationDate.toISOString()
+      expiresAt: expirationDate.toISOString(),
+      customName: customName?.trim() || undefined
     };
     
     // Get existing URLs and add the new one

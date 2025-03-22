@@ -23,6 +23,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/r/:id" element={<Redirect />} />
             <Route path="/stats" element={<StatsPage />} />
+            <Route path="/:id" element={<Redirect />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AnimatePresence>

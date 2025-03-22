@@ -1,29 +1,41 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link2, ArrowRight, Clipboard, Check } from 'lucide-react';
+import { Link2, ArrowRight, Clipboard, Check, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { createShortUrl } from '@/utils/urlService';
+import { Label } from '@/components/ui/label';
+import { Form, FormField, FormItem, FormLabel, FormControl } from '@/components/ui/form';
+import { useForm } from 'react-hook-form';
+
+interface UrlFormData {
+  url: string;
+  customName?: string;
+}
 
 const UrlForm = () => {
-  const [url, setUrl] = useState('');
   const [shortUrl, setShortUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  
+  const form = useForm<UrlFormData>({
+    defaultValues: {
+      url: '',
+      customName: ''
+    }
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!url) {
+  const handleSubmit = async (data: UrlFormData) => {
+    if (!data.url) {
       toast.error('Please enter a URL');
       return;
     }
 
     try {
       setLoading(true);
-      const result = await createShortUrl(url);
+      const result = await createShortUrl(data.url, data.customName);
       setShortUrl(result.shortUrl);
       toast.success('URL shortened successfully!');
     } catch (error) {
@@ -72,36 +84,68 @@ const UrlForm = () => {
         All links automatically expire after 3 days.
       </p>
 
-      <form onSubmit={handleSubmit} className="mb-8">
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="relative flex-grow">
-            <Input
-              type="url"
-              placeholder="Enter your long URL here"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              className="h-12 pl-4 pr-12 text-base focus-ring"
-              required
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="mb-8 space-y-4">
+          <div className="flex flex-col gap-4">
+            <FormField
+              control={form.control}
+              name="url"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>URL to shorten</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="url"
+                      placeholder="Enter your long URL here"
+                      className="h-12 pl-4 pr-12 text-base focus-ring"
+                      required
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
             />
+            
+            <FormField
+              control={form.control}
+              name="customName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Custom name (optional)</FormLabel>
+                  <div className="relative flex-grow">
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder="e.g. your-name or your-brand"
+                        className="h-12 pl-4 pr-12 text-base focus-ring"
+                        {...field}
+                      />
+                    </FormControl>
+                    <User className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  </div>
+                </FormItem>
+              )}
+            />
+            
+            <Button 
+              type="submit" 
+              className="h-12 px-6 font-medium transition-all duration-300 flex items-center gap-2 mt-2"
+              disabled={loading}
+            >
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent"></span>
+                  <span>Shortening...</span>
+                </span>
+              ) : (
+                <>
+                  Shorten <ArrowRight className="w-4 h-4" />
+                </>
+              )}
+            </Button>
           </div>
-          <Button 
-            type="submit" 
-            className="h-12 px-6 font-medium transition-all duration-300 flex items-center gap-2"
-            disabled={loading}
-          >
-            {loading ? (
-              <span className="flex items-center gap-2">
-                <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent"></span>
-                <span>Shortening...</span>
-              </span>
-            ) : (
-              <>
-                Shorten <ArrowRight className="w-4 h-4" />
-              </>
-            )}
-          </Button>
-        </div>
-      </form>
+        </form>
+      </Form>
 
       {shortUrl && (
         <motion.div 
