@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { LinkShortening, BarChart3 } from 'lucide-react';
+import { Link as LinkIcon, BarChart3 } from 'lucide-react';
 
 const Header = () => {
   return (
@@ -13,7 +13,7 @@ const Header = () => {
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
       <Link to="/" className="flex items-center space-x-2 focus-ring rounded-md p-1">
-        <LinkShortening className="w-6 h-6 text-primary" />
+        <LinkIcon className="w-6 h-6 text-primary" />
         <span className="text-xl font-display font-medium">URLQuick</span>
       </Link>
       <nav>
