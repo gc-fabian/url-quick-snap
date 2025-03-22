@@ -23,7 +23,7 @@ const getBaseUrl = () => {
 
 // Generate a short ID for the URL
 const generateShortId = () => {
-  return nanoid(5); // Reduced to 5 characters for shorter URLs
+  return nanoid(5); // 5 characters for shorter URLs
 };
 
 // Get all URLs from localStorage
@@ -82,6 +82,11 @@ export const createShortUrl = async (originalUrl: string, customName?: string): 
         .replace(/\s+/g, '-')
         .replace(/[^a-z0-9-]/g, '');
       
+      // Make sure it's not too long
+      if (shortId.length > 20) {
+        shortId = shortId.substring(0, 20);
+      }
+      
       // Check if this custom name is already in use
       const existingUrls = getAllUrls();
       const nameExists = existingUrls.some(url => url.id === shortId);
@@ -94,7 +99,7 @@ export const createShortUrl = async (originalUrl: string, customName?: string): 
       shortId = generateShortId();
     }
     
-    // Create shorter URL directly to the ID instead of including '/r/'
+    // Create shorter URL
     const shortUrl = `${getBaseUrl()}/${shortId}`;
     
     // Calculate expiration (3 days from now)
