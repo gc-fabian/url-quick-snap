@@ -1,69 +1,100 @@
-# Welcome to your Lovable project
 
-## Project info
+# URL Quick Snap - URL Shortener
 
-**URL**: https://lovable.dev/projects/3523cb40-7828-44eb-88a6-1f79952eb48e
+URL Quick Snap is a simple, easy-to-use URL shortener that allows you to create shorter, custom links that redirect to your original URLs.
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+- Shorten any URL with a randomly generated 5-character code
+- Create custom short links with personalized names
+- Track click statistics for your shortened URLs
+- Automatic expiration after 3 days
+- Responsive design for desktop and mobile use
 
-**Use Lovable**
+## Live Demo
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/3523cb40-7828-44eb-88a6-1f79952eb48e) and start prompting.
+You can access the live demo at: [https://3523cb40-7828-44eb-88a6-1f79952eb48e.lovableproject.com](https://3523cb40-7828-44eb-88a6-1f79952eb48e.lovableproject.com)
 
-Changes made via Lovable will be committed automatically to this repo.
+## How to Use
 
-**Use your preferred IDE**
+1. **Shorten a URL**:
+   - Enter any long URL in the input field
+   - Optionally, add a custom name for your short link
+   - Click "Shorten URL"
+   - Copy the generated short URL to share with others
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+2. **Using Custom Names**:
+   - When shortening a URL, enter a custom name in the "Custom Name (optional)" field
+   - Custom names can contain letters, numbers, and hyphens
+   - Spaces will be converted to hyphens
+   - Maximum length is 20 characters
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+3. **Viewing Statistics**:
+   - Click on "View Stats" on any shortened URL card
+   - Or navigate to the /stats page to see all your URLs and their click counts
 
-Follow these steps:
+## Running Locally
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+To run URL Quick Snap on your local machine:
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Prerequisites
 
-# Step 3: Install the necessary dependencies.
-npm i
+- Node.js (version 16 or higher)
+- npm or yarn package manager
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+### Installation Steps
 
-**Edit a file directly in GitHub**
+1. Clone the repository:
+   ```sh
+   git clone <YOUR_REPOSITORY_URL>
+   cd url-quick-snap
+   ```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+2. Install dependencies:
+   ```sh
+   npm install
+   # or
+   yarn install
+   ```
 
-**Use GitHub Codespaces**
+3. Start the development server:
+   ```sh
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+4. Open your browser and navigate to:
+   ```
+   http://localhost:8080
+   ```
 
-## What technologies are used for this project?
+## Building for Production
 
-This project is built with .
+1. Create a production build:
+   ```sh
+   npm run build
+   # or
+   yarn build
+   ```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+2. Preview the production build locally:
+   ```sh
+   npm run preview
+   # or
+   yarn preview
+   ```
 
-## How can I deploy this project?
+3. The built files will be in the `dist` directory, which you can deploy to any static hosting service.
 
-Simply open [Lovable](https://lovable.dev/projects/3523cb40-7828-44eb-88a6-1f79952eb48e) and click on Share -> Publish.
+## Technical Implementation
 
-## I want to use a custom domain - is that possible?
+- This application is built with React, TypeScript, and Vite
+- Uses localStorage for data persistence (in a production environment, you would use a database)
+- Styled with Tailwind CSS and shadcn/ui components
+- URL data expires after 3 days
+- All shortening and redirection happens on the client-side
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+## License
+
+This project is open source and available under the MIT License.
